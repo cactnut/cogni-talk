@@ -1,101 +1,101 @@
-# Realtime API Agents Demo
+# リアルタイム API エージェント デモ
 
-This is a demonstration of more advanced patterns for voice agents, using the OpenAI Realtime API and the OpenAI Agents SDK. 
+OpenAI Realtime API と OpenAI Agents SDK を使用した音声エージェントの高度なパターンを実演するデモアプリケーションです。
 
-## About the OpenAI Agents SDK
+## OpenAI Agents SDK について
 
-This project uses the [OpenAI Agents SDK](https://github.com/openai/openai-agents-js), a toolkit for building, managing, and deploying advanced AI agents. The SDK provides:
+このプロジェクトでは [OpenAI Agents SDK](https://github.com/openai/openai-agents-js) を使用しています。これは高度な AI エージェントの構築、管理、デプロイメントのためのツールキットです。SDK は以下の機能を提供します：
 
-- A unified interface for defining agent behaviors and tool integrations.
-- Built-in support for agent orchestration, state management, and event handling.
-- Easy integration with the OpenAI Realtime API for low-latency, streaming interactions.
-- Extensible patterns for multi-agent collaboration, handoffs, tool use, and guardrails.
+- エージェントの動作とツール統合を定義するための統一インターフェース
+- エージェントオーケストレーション、状態管理、イベント処理の組み込みサポート
+- 低遅延ストリーミング対話のための OpenAI Realtime API との簡単な統合
+- マルチエージェント協調、ハンドオフ、ツール使用、ガードレールの拡張可能なパターン
 
-For full documentation, guides, and API references, see the official [OpenAI Agents SDK Documentation](https://github.com/openai/openai-agents-js#readme).
+完全なドキュメント、ガイド、API リファレンスについては、公式の [OpenAI Agents SDK ドキュメント](https://github.com/openai/openai-agents-js#readme) をご覧ください。
 
-**NOTE:** For a version that does not use the OpenAI Agents SDK, see the [branch without-agents-sdk](https://github.com/openai/openai-realtime-agents/tree/without-agents-sdk).
+**注意:** OpenAI Agents SDK を使用しないバージョンについては、[without-agents-sdk ブランチ](https://github.com/openai/openai-realtime-agents/tree/without-agents-sdk) をご覧ください。
 
-There are two main patterns demonstrated:
-1. **Chat-Supervisor:** A realtime-based chat agent interacts with the user and handles basic tasks, while a more intelligent, text-based supervisor model (e.g., `gpt-4.1`) is used extensively for tool calls and more complex responses. This approach provides an easy onramp and high-quality answers, with a small increase in latency.
-2. **Sequential Handoff:** Specialized agents (powered by realtime api) transfer the user between them to handle specific user intents. This is great for customer service, where user intents can be handled sequentially by specialist models that excel in a specific domains. This helps avoid the model having all instructions and tools in a single agent, which can degrade performance.
+このデモでは2つの主要なパターンを実演しています：
+1. **チャット-スーパーバイザー:** リアルタイムベースのチャットエージェントがユーザーと対話し基本的なタスクを処理する一方で、より高度なテキストベースのスーパーバイザーモデル（例：`gpt-4.1`）がツール呼び出しやより複雑な応答に使用されます。このアプローチは簡単な導入と高品質な回答を提供し、遅延の増加は僅かです。
+2. **順次ハンドオフ:** 特化されたエージェント（リアルタイム API によって駆動）が特定のユーザーの意図を処理するために、ユーザーを相互に転送します。これは、特定のドメインに特化したモデルがユーザーの意図を順次処理できるカスタマーサービスに最適です。これにより、単一のエージェントにすべての指示とツールを持たせることによるパフォーマンス低下を回避できます。
 
-## Setup
+## セットアップ
 
-- This is a Next.js typescript app. Install dependencies with `npm i`.
-- Add your `OPENAI_API_KEY` to your env. Either add it to your `.bash_profile` or equivalent, or copy `.env.sample` to `.env` and add it there.
-- Start the server with `npm run dev`
-- Open your browser to [http://localhost:3000](http://localhost:3000). It should default to the `chatSupervisor` Agent Config.
-- You can change examples via the "Scenario" dropdown in the top right.
+- これは Next.js TypeScript アプリです。`npm i` で依存関係をインストールしてください。
+- 環境変数に `OPENAI_API_KEY` を追加してください。`.bash_profile` または同等のファイルに追加するか、`.env.sample` を `.env` にコピーして追加してください。
+- `npm run dev` でサーバーを起動してください
+- ブラウザで [http://localhost:3000](http://localhost:3000) を開いてください。デフォルトで `chatSupervisor` エージェント設定になります。
+- 右上の「Scenario」ドロップダウンから例を変更できます。
 
-# Agentic Pattern 1: Chat-Supervisor
+# エージェントパターン 1: チャット-スーパーバイザー
 
-This is demonstrated in the [chatSupervisor](src/app/agentConfigs/chatSupervisor/index.ts) Agent Config. The chat agent uses the realtime model to converse with the user and handle basic tasks, like greeting the user, casual conversation, and collecting information, and a more intelligent, text-based supervisor model (e.g. `gpt-4.1`) is used extensively to handle tool calls and more challenging responses. You can control the decision boundary by "opting in" specific tasks to the chat agent as desired.
+このパターンは [chatSupervisor](src/app/agentConfigs/chatSupervisor/index.ts) エージェント設定で実演されています。チャットエージェントはリアルタイムモデルを使用してユーザーと会話し、ユーザーへの挨拶、日常会話、情報収集などの基本的なタスクを処理します。一方で、より高度なテキストベースのスーパーバイザーモデル（例：`gpt-4.1`）がツール呼び出しやより困難な応答を広範囲に処理します。特定のタスクをチャットエージェントに「オプトイン」することで、決定境界を制御できます。
 
-Video walkthrough: [https://x.com/noahmacca/status/1927014156152058075](https://x.com/noahmacca/status/1927014156152058075)
+動画解説: [https://x.com/noahmacca/status/1927014156152058075](https://x.com/noahmacca/status/1927014156152058075)
 
-## Example
-![Screenshot of the Chat Supervisor Flow](/public/screenshot_chat_supervisor.png)
-*In this exchange, note the immediate response to collect the phone number, and the deferral to the supervisor agent to handle the tool call and formulate the response. There ~2s between the end of "give me a moment to check on that." being spoken aloud and the start of the "Thanks for waiting. Your last bill...".*
+## 例
+![チャットスーパーバイザーフローのスクリーンショット](/public/screenshot_chat_supervisor.png)
+*この会話では、電話番号を収集するための即座の応答と、ツール呼び出しを処理し応答を策定するためのスーパーバイザーエージェントへの委任に注目してください。「少々お待ちください」の発話が終了してから「お待たせしました。最後の請求書は...」の開始まで約2秒です。*
 
-## Schematic
+## 概要図
 ```mermaid
 sequenceDiagram
-    participant User
-    participant ChatAgent as Chat Agent<br/>(gpt-4o-realtime-mini)
-    participant Supervisor as Supervisor Agent<br/>(gpt-4.1)
-    participant Tool as Tool
+    participant User as ユーザー
+    participant ChatAgent as チャットエージェント<br/>(gpt-4o-realtime-mini)
+    participant Supervisor as スーパーバイザーエージェント<br/>(gpt-4.1)
+    participant Tool as ツール
 
-    alt Basic chat or info collection
-        User->>ChatAgent: User message
-        ChatAgent->>User: Responds directly
-    else Requires higher intelligence and/or tool call
-        User->>ChatAgent: User message
-        ChatAgent->>User: "Let me think"
-        ChatAgent->>Supervisor: Forwards message/context
-        alt Tool call needed
-            Supervisor->>Tool: Calls tool
-            Tool->>Supervisor: Returns result
+    alt 基本的なチャットまたは情報収集
+        User->>ChatAgent: ユーザーメッセージ
+        ChatAgent->>User: 直接応答
+    else より高い知能やツール呼び出しが必要
+        User->>ChatAgent: ユーザーメッセージ
+        ChatAgent->>User: "考えさせてください"
+        ChatAgent->>Supervisor: メッセージ/コンテキストを転送
+        alt ツール呼び出しが必要
+            Supervisor->>Tool: ツールを呼び出し
+            Tool->>Supervisor: 結果を返す
         end
-        Supervisor->>ChatAgent: Returns response
-        ChatAgent->>User: Delivers response
+        Supervisor->>ChatAgent: 応答を返す
+        ChatAgent->>User: 応答を配信
     end
 ```
 
-## Benefits
-- **Simpler onboarding.** If you already have a performant text-based chat agent, you can give that same prompt and set of tools to the supervisor agent, and make some tweaks to the chat agent prompt, you'll have a natural voice agent that will perform on par with your text agent.
-- **Simple ramp to a full realtime agent**: Rather than switching your whole agent to the realtime api, you can move one task at a time, taking time to validate and build trust for each before deploying to production.
-- **High intelligence**: You benefit from the high intelligence, excellent tool calling and instruction following of models like `gpt-4.1` in your voice agents.
-- **Lower cost**: If your chat agent is only being used for basic tasks, you can use the realtime-mini model, which, even when combined with GPT-4.1, should be cheaper than using the full 4o-realtime model.
-- **User experience**: It's a more natural conversational experience than using a stitched model architecture, where response latency is often 1.5s or longer after a user has finished speaking. In this architecture, the model responds to the user right away, even if it has to lean on the supervisor agent.
-  - However, more assistant responses will start with "Let me think", rather than responding immediately with the full response.
+## メリット
+- **簡単な導入**: すでに高性能なテキストベースのチャットエージェントがある場合、同じプロンプトとツールセットをスーパーバイザーエージェントに与え、チャットエージェントのプロンプトを少し調整するだけで、テキストエージェントと同等の性能を持つ自然な音声エージェントを作成できます。
+- **完全なリアルタイムエージェントへの段階的移行**: エージェント全体をリアルタイム API に切り替えるのではなく、一度に一つのタスクずつ移行し、本番環境にデプロイする前に各タスクを検証し信頼を構築する時間を取ることができます。
+- **高い知性**: 音声エージェントで `gpt-4.1` などのモデルの高い知性、優れたツール呼び出し、指示遵守の恩恵を受けることができます。
+- **低コスト**: チャットエージェントが基本的なタスクにのみ使用される場合、realtime-mini モデルを使用でき、GPT-4.1 と組み合わせても、完全な 4o-realtime モデルを使用するよりも安価になるはずです。
+- **ユーザーエクスペリエンス**: ユーザーが話し終えた後の応答遅延が1.5秒以上になることが多い継ぎ接ぎモデルアーキテクチャを使用するよりも、より自然な会話体験を提供します。このアーキテクチャでは、スーパーバイザーエージェントに依存する必要があってもモデルがすぐにユーザーに応答します。
+  - ただし、完全な応答ですぐに応答するのではなく、「考えさせてください」から始まるアシスタント応答が多くなります。
 
-## Modifying for your own agent
-1. Update [supervisorAgent](src/app/agentConfigs/chatSupervisorDemo/supervisorAgent.ts).
-  - Add your existing text agent prompt and tools if you already have them. This should contain the "meat" of your voice agent logic and be very specific with what it should/shouldn't do and how exactly it should respond. Add this information below `==== Domain-Specific Agent Instructions ====`.
-  - You should likely update this prompt to be more appropriate for voice, for example with instructions to be concise and avoiding long lists of items.
-2. Update [chatAgent](src/app/agentConfigs/chatSupervisor/index.ts).
-  - Customize the chatAgent instructions with your own tone, greeting, etc.
-  - Add your tool definitions to `chatAgentInstructions`. We recommend a brief yaml description rather than json to ensure the model doesn't get confused and try calling the tool directly.
-  - You can modify the decision boundary by adding new items to the `# Allow List of Permitted Actions` section.
-3. To reduce cost, try using `gpt-4o-mini-realtime` for the chatAgent and/or `gpt-4.1-mini` for the supervisor model. To maximize intelligence on particularly difficult or high-stakes tasks, consider trading off latency and adding chain-of-thought to your supervisor prompt, or using an additional reasoning model-based supervisor that uses `o4-mini`.
+## 独自エージェントの作成方法
+1. [supervisorAgent](src/app/agentConfigs/chatSupervisorDemo/supervisorAgent.ts) を更新します。
+  - 既存のテキストエージェントのプロンプトとツールがある場合は追加してください。これには音声エージェントロジックの「核心部分」を含め、何をすべき/すべきでないか、どのように正確に応答すべきかを非常に具体的にする必要があります。`==== Domain-Specific Agent Instructions ====` の下にこの情報を追加してください。
+  - 音声により適したプロンプトに更新する必要があります。例えば、簡潔にすることや長いアイテムリストを避けることなどです。
+2. [chatAgent](src/app/agentConfigs/chatSupervisor/index.ts) を更新します。
+  - chatAgent の指示を独自のトーン、挨拶などでカスタマイズしてください。
+  - `chatAgentInstructions` にツール定義を追加してください。モデルが混乱してツールを直接呼び出そうとしないよう、JSON ではなく簡潔な YAML 記述を推奨します。
+  - `# Allow List of Permitted Actions` セクションに新しい項目を追加することで、決定境界を変更できます。
+3. コストを削減するには、chatAgent に `gpt-4o-mini-realtime` を、スーパーバイザーモデルに `gpt-4.1-mini` を使用してみてください。特に困難またはハイステークなタスクで知性を最大化するには、遅延とのトレードオフを考慮し、スーパーバイザープロンプトに思考連鎖を追加するか、`o4-mini` を使用する追加の推論モデルベースのスーパーバイザーを使用することを検討してください。
 
-# Agentic Pattern 2: Sequential Handoffs
+# エージェントパターン 2: 順次ハンドオフ
 
-This pattern is inspired by [OpenAI Swarm](https://github.com/openai/swarm) and involves the sequential handoff of a user between specialized agents. Handoffs are decided by the model and coordinated via tool calls, and possible handoffs are defined explicitly in an agent graph. A handoff triggers a session.update event with new instructions and tools. This pattern is effective for handling a variety of user intents with specialist agents, each of which might have long instructions and numerous tools.
+このパターンは [OpenAI Swarm](https://github.com/openai/swarm) にインスパイアされており、特化されたエージェント間でのユーザーの順次ハンドオフを含みます。ハンドオフはモデルによって決定され、ツール呼び出しを通じて調整され、可能なハンドオフはエージェントグラフで明示的に定義されます。ハンドオフは新しい指示とツールで session.update イベントをトリガーします。このパターンは、それぞれが長い指示と多数のツールを持つ専門エージェントで様々なユーザーの意図を処理するのに効果的です。
 
-Here's a [video walkthrough](https://x.com/OpenAIDevs/status/1880306081517432936) showing how it works. You should be able to use this repo to prototype your own multi-agent realtime voice app in less than 20 minutes!
+動作方法を示す [動画解説](https://x.com/OpenAIDevs/status/1880306081517432936) があります。このリポジトリを使用して、20分未満で独自のマルチエージェントリアルタイム音声アプリのプロトタイプを作成できるはずです！
 
-![Screenshot of the Realtime API Agents Demo](/public/screenshot_handoff.png)
-*In this simple example, the user is transferred from a greeter agent to a haiku agent. See below for the simple, full configuration of this flow.*
+![リアルタイム API エージェントデモのスクリーンショット](/public/screenshot_handoff.png)
+*この簡単な例では、ユーザーは greeter エージェントから haiku エージェントに転送されます。このフローの簡潔で完全な設定を以下に示します。*
 
-Configuration in `src/app/agentConfigs/simpleExample.ts`
+`src/app/agentConfigs/simpleExample.ts` での設定
 ```typescript
 import { RealtimeAgent } from '@openai/agents/realtime';
 
-// Define agents using the OpenAI Agents SDK
+// OpenAI Agents SDK を使用してエージェントを定義
 export const haikuWriterAgent = new RealtimeAgent({
   name: 'haikuWriter',
-  handoffDescription: 'Agent that writes haikus.', // Context for the agent_transfer tool
+  handoffDescription: 'Agent that writes haikus.', // agent_transfer ツールのコンテキスト
   instructions:
     'Ask the user for a topic, then reply with a haiku about that topic.',
   tools: [],
@@ -108,21 +108,21 @@ export const greeterAgent = new RealtimeAgent({
   instructions:
     "Please greet the user and ask them if they'd like a haiku. If yes, hand off to the 'haikuWriter' agent.",
   tools: [],
-  handoffs: [haikuWriterAgent], // Define which agents this agent can hand off to
+  handoffs: [haikuWriterAgent], // このエージェントがハンドオフできるエージェントを定義
 });
 
-// An Agent Set is just an array of the agents that participate in the scenario
+// エージェントセットは、シナリオに参加するエージェントの配列です
 export default [greeterAgent, haikuWriterAgent];
 ```
-## CustomerServiceRetail Flow
+## CustomerServiceRetail フロー
 
-This is a more complex, representative implementation that illustrates a customer service flow, with the following features:
-- A more complex agent graph with agents for user authentication, returns, sales, and a placeholder human agent for escalations.
-- An escalation by the [returns](https://github.com/openai/openai-realtime-agents/blob/60f4effc50a539b19b2f1fa4c38846086b58c295/src/app/agentConfigs/customerServiceRetail/returns.ts#L233) agent to `o4-mini` to validate and initiate a return, as an example high-stakes decision, using a similar pattern to the above.
-- Prompting models to follow a state machine, for example to accurately collect things like names and phone numbers with confirmation character by character to authenticate a user.
-  - To test this flow, say that you'd like to return your snowboard and go through the necessary prompts!
+これは、以下の機能を持つカスタマーサービスフローを示すより複雑で代表的な実装です：
+- ユーザー認証、返品、販売、エスカレーション用のプレースホルダー人間エージェントを含む、より複雑なエージェントグラフ
+- 上記と同様のパターンを使用して、ハイステークな決定の例として返品を検証し開始するための [returns](https://github.com/openai/openai-realtime-agents/blob/60f4effc50a539b19b2f1fa4c38846086b58c295/src/app/agentConfigs/customerServiceRetail/returns.ts#L233) エージェントによる `o4-mini` へのエスカレーション
+- ユーザーを認証するために名前や電話番号などを文字ごとに確認して正確に収集するなど、ステートマシンに従うようにモデルにプロンプトする
+  - このフローをテストするには、スノーボードを返品したいと言って、必要なプロンプトを進めてください！
 
-Configuration in [src/app/agentConfigs/customerServiceRetail/index.ts](src/app/agentConfigs/customerServiceRetail/index.ts).
+[src/app/agentConfigs/customerServiceRetail/index.ts](src/app/agentConfigs/customerServiceRetail/index.ts) での設定
 ```javascript
 import authentication from "./authentication";
 import returns from "./returns";
@@ -145,85 +145,85 @@ const agents = injectTransferTools([
 export default agents;
 ```
 
-## Schematic
+## 概要図
 
-This diagram illustrates a more advanced interaction flow defined in `src/app/agentConfigs/customerServiceRetail/`, including detailed events.
+この図は、詳細なイベントを含む `src/app/agentConfigs/customerServiceRetail/` で定義されたより高度な相互作用フローを示しています。
 
 <details>
-<summary><strong>Show CustomerServiceRetail Flow Diagram</strong></summary>
+<summary><strong>CustomerServiceRetail フロー図を表示</strong></summary>
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant WebClient as Next.js Client
+    participant User as ユーザー
+    participant WebClient as Next.js クライアント
     participant NextAPI as /api/session
     participant RealtimeAPI as OpenAI Realtime API
-    participant AgentManager as Agents (authentication, returns, sales, simulatedHuman)
-    participant o1mini as "o4-mini" (Escalation Model)
+    participant AgentManager as エージェント (認証, 返品, 販売, 模擬人間)
+    participant o1mini as "o4-mini" (エスカレーションモデル)
 
-    Note over WebClient: User navigates to ?agentConfig=customerServiceRetail
-    User->>WebClient: Open Page
+    Note over WebClient: ユーザーが ?agentConfig=customerServiceRetail に移動
+    User->>WebClient: ページを開く
     WebClient->>NextAPI: GET /api/session
     NextAPI->>RealtimeAPI: POST /v1/realtime/sessions
-    RealtimeAPI->>NextAPI: Returns ephemeral session
-    NextAPI->>WebClient: Returns ephemeral token (JSON)
+    RealtimeAPI->>NextAPI: 一時的セッションを返す
+    NextAPI->>WebClient: 一時的トークンを返す (JSON)
 
-    Note right of WebClient: Start RTC handshake
+    Note right of WebClient: RTC ハンドシェイクを開始
     WebClient->>RealtimeAPI: Offer SDP (WebRTC)
     RealtimeAPI->>WebClient: SDP answer
-    WebClient->>WebClient: DataChannel "oai-events" established
+    WebClient->>WebClient: DataChannel "oai-events" 確立
 
-    Note over AgentManager: Default agent is "authentication"
-    User->>WebClient: "Hi, I'd like to return my snowboard."
+    Note over AgentManager: デフォルトエージェントは "authentication"
+    User->>WebClient: "こんにちは、スノーボードを返品したいです。"
     WebClient->>AgentManager: conversation.item.create (role=user)
     WebClient->>RealtimeAPI: {type: "conversation.item.create"}
     WebClient->>RealtimeAPI: {type: "response.create"}
 
-    authentication->>AgentManager: Requests user info, calls authenticate_user_information()
+    authentication->>AgentManager: ユーザー情報をリクエスト、authenticate_user_information() を呼び出し
     AgentManager-->>WebClient: function_call => name="authenticate_user_information"
-    WebClient->>WebClient: handleFunctionCall => verifies details
+    WebClient->>WebClient: handleFunctionCall => 詳細を検証
 
-    Note over AgentManager: After user is authenticated
+    Note over AgentManager: ユーザー認証後
     authentication->>AgentManager: transferAgents("returns")
     AgentManager-->>WebClient: function_call => name="transferAgents" args={ destination: "returns" }
     WebClient->>WebClient: setSelectedAgentName("returns")
 
-    Note over returns: The user wants to process a return
+    Note over returns: ユーザーが返品処理を希望
     returns->>AgentManager: function_call => checkEligibilityAndPossiblyInitiateReturn
     AgentManager-->>WebClient: function_call => name="checkEligibilityAndPossiblyInitiateReturn"
 
-    Note over WebClient: The WebClient calls /api/chat/completions with model="o4-mini"
-    WebClient->>o1mini: "Is this item eligible for return?"
-    o1mini->>WebClient: "Yes/No (plus notes)"
+    Note over WebClient: WebClient が model="o4-mini" で /api/chat/completions を呼び出し
+    WebClient->>o1mini: "この商品は返品対象ですか？"
+    o1mini->>WebClient: "はい/いいえ (詳細付き)"
 
-    Note right of returns: Returns uses the result from "o4-mini"
-    returns->>AgentManager: "Return is approved" or "Return is denied"
+    Note right of returns: Returns が "o4-mini" からの結果を使用
+    returns->>AgentManager: "返品が承認されました" または "返品が拒否されました"
     AgentManager->>WebClient: conversation.item.create (assistant role)
-    WebClient->>User: Displays final verdict
+    WebClient->>User: 最終的な判定を表示
 ```
 
 </details>
 
-# Other Info
-## Next Steps
-- You can copy these templates to make your own multi-agent voice app! Once you make a new agent set config, add it to `src/app/agentConfigs/index.ts` and you should be able to select it in the UI in the "Scenario" dropdown menu.
-- Each agentConfig can define instructions, tools, and toolLogic. By default all tool calls simply return `True`, unless you define the toolLogic, which will run your specific tool logic and return an object to the conversation (e.g. for retrieved RAG context).
-- If you want help creating your own prompt using the conventions shown in customerServiceRetail, including defining a state machine, we've included a metaprompt [here](src/app/agentConfigs/voiceAgentMetaprompt.txt), or you can use our [Voice Agent Metaprompter GPT](https://chatgpt.com/g/g-678865c9fb5c81918fa28699735dd08e-voice-agent-metaprompt-gpt)
+# その他の情報
+## 次のステップ
+- これらのテンプレートをコピーして独自のマルチエージェント音声アプリを作成できます！新しいエージェントセット設定を作成したら、`src/app/agentConfigs/index.ts` に追加することで、UI の「Scenario」ドロップダウンメニューで選択できるようになります。
+- 各 agentConfig は instructions、tools、toolLogic を定義できます。デフォルトでは、すべてのツール呼び出しは単に `True` を返しますが、toolLogic を定義すると、特定のツールロジックを実行して会話にオブジェクトを返します（例：取得された RAG コンテキスト用）。
+- ステートマシンの定義を含む customerServiceRetail で示されている規則を使用して独自のプロンプトを作成したい場合は、[こちら](src/app/agentConfigs/voiceAgentMetaprompt.txt) にメタプロンプトを含めているか、[Voice Agent Metaprompter GPT](https://chatgpt.com/g/g-678865c9fb5c81918fa28699735dd08e-voice-agent-metaprompt-gpt) を使用できます
 
-## Output Guardrails
-Assistant messages are checked for safety and compliance before they are shown in the UI.  The guardrail call now lives directly inside `src/app/App.tsx`: when a `response.text.delta` stream starts we mark the message as **IN_PROGRESS**, and once the server emits `guardrail_tripped` or `response.done` we mark the message as **FAIL** or **PASS** respectively.  If you want to change how moderation is triggered or displayed, search for `guardrail_tripped` inside `App.tsx` and tweak the logic there.
+## 出力ガードレール
+アシスタントメッセージは UI に表示される前に安全性とコンプライアンスがチェックされます。ガードレールの呼び出しは現在 `src/app/App.tsx` 内に直接配置されています：`response.text.delta` ストリームが開始されると、メッセージを **IN_PROGRESS** としてマークし、サーバーが `guardrail_tripped` または `response.done` を発行すると、それぞれ **FAIL** または **PASS** としてマークします。モデレーションのトリガー方法や表示方法を変更したい場合は、`App.tsx` 内で `guardrail_tripped` を検索してロジックを調整してください。
 
-## Navigating the UI
-- You can select agent scenarios in the Scenario dropdown, and automatically switch to a specific agent with the Agent dropdown.
-- The conversation transcript is on the left, including tool calls, tool call responses, and agent changes. Click to expand non-message elements.
-- The event log is on the right, showing both client and server events. Click to see the full payload.
-- On the bottom, you can disconnect, toggle between automated voice-activity detection or PTT, turn off audio playback, and toggle logs.
+## UI の操作方法
+- Scenario ドロップダウンでエージェントシナリオを選択し、Agent ドロップダウンで特定のエージェントに自動的に切り替えることができます。
+- 会話の記録は左側にあり、ツール呼び出し、ツール呼び出し応答、エージェント変更が含まれます。メッセージ以外の要素をクリックして展開できます。
+- イベントログは右側にあり、クライアントとサーバーの両方のイベントを表示します。完全なペイロードを見るにはクリックしてください。
+- 下部では、切断、自動音声活動検出または PTT の切り替え、音声再生のオフ、ログの切り替えができます。
 
-## Pull Requests
+## プルリクエスト
 
-Feel free to open an issue or pull request and we'll do our best to review it. The spirit of this repo is to demonstrate the core logic for new agentic flows; PRs that go beyond this core scope will likely not be merged.
+お気軽に issue やプルリクエストを開いてください。レビューに最善を尽くします。このリポジトリの精神は新しいエージェントフローのコアロジックを実演することです；このコアスコープを超える PR はマージされない可能性があります。
 
-# Core Contributors
+# コア貢献者
 - Noah MacCallum - [noahmacca](https://x.com/noahmacca)
 - Ilan Bigio - [ibigio](https://github.com/ibigio)
 - Brian Fioca - [bfioca](https://github.com/bfioca)
